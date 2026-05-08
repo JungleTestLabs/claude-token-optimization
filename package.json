@@ -1,0 +1,27 @@
+{
+  "name": "claude-token-optimization",
+  "version": "1.0.0",
+  "description": "研究Claude Code及其他Claude工具中减少token消耗的方法论和实践。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JungleTestLabs/claude-token-optimization.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JungleTestLabs/claude-token-optimization/issues"
+  },
+  "homepage": "https://github.com/JungleTestLabs/claude-token-optimization#readme",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
