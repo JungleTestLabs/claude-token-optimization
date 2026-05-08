@@ -137,7 +137,10 @@ const agenda = [
   { num: "03", title: "四大优化支柱", desc: "配置 · 流程 · 提示 · 工具链" },
   { num: "04", title: "量化对比与ROI", desc: "优化前 vs 优化后 — 省了多少钱？" },
   { num: "05", title: "安卓转鸿蒙专项", desc: "针对迁移项目的特殊策略" },
-  { num: "06", title: "行动清单", desc: "今天/本周/持续要做的事" },
+  { num: "06", title: "数据来源与准确性", desc: "数字怎么来的？如何验证？" },
+  { num: "07", title: "优先级排序", desc: "从易到难，从快到慢" },
+  { num: "08", title: "OpenCode优化指南", desc: "提供商套利 + 多模型策略" },
+  { num: "09", title: "行动清单", desc: "今天/本周/持续要做的事" },
 ];
 
 agenda.forEach((a, i) => {
@@ -508,12 +511,173 @@ s9.addText("迁移项目(12模块):  未优化 $1,440(Opus) → 优化后 $22(�
 });
 
 // ============================================================
-// SLIDE 10: 行动清单
+// SLIDE 10: 数据来源与准确性
 // ============================================================
 const s10 = pres.addSlide();
 s10.background = { color: C.offW };
-titleBar(s10, "行动清单");
+titleBar(s10, "数据来源与准确性 — 数字从哪来？");
 footer(s10, "10");
+
+// 三级来源
+const sources = [
+  { label: "一级: 官方定价", items: "Anthropic定价页 · DeepSeek API文档 · Claude SDK count_tokens()", color: C.green },
+  { label: "二级: 社区实测", items: "Reddit 20+帖 · GitHub Issues · V2EX真实账单 · 月费$20-$300", color: C.teal },
+  { label: "三级: 学术/推算", items: "LLMLingua论文 · Selective Context论文 · tokenizer原理推算", color: C.gold },
+];
+
+sources.forEach((src, i) => {
+  const y = 1.3 + i * 1.0;
+  s10.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 4.5, h: 0.8, fill: { color: C.white }, shadow: makeShadow() });
+  s10.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 0.06, h: 0.8, fill: { color: src.color } });
+  s10.addText(src.label, {
+    x: 0.95, y: y + 0.05, w: 2.0, h: 0.3,
+    fontSize: 13, bold: true, color: C.navy, margin: 0,
+  });
+  s10.addText(src.items, {
+    x: 0.95, y: y + 0.4, w: 4.0, h: 0.35,
+    fontSize: 11, color: C.gray, margin: 0,
+  });
+});
+
+// 右侧：验证方法
+s10.addShape(pres.shapes.RECTANGLE, { x: 5.5, y: 1.3, w: 3.8, h: 3.2, fill: { color: C.navy } });
+s10.addText("🔍 如何验证？", {
+  x: 5.7, y: 1.45, w: 3.4, h: 0.35,
+  fontSize: 14, bold: true, color: C.white, margin: 0,
+});
+const verifyItems = [
+  "① 打开 anthropic.com/pricing 查看实时定价",
+  "② 查看 ~/.claude/usage.json 对照自己用量",
+  "③ 运行 /tokens 命令看当前会话",
+  "④ 所有节省比例取保守值(<实测)",
+  "⑤ count_tokens() = API计费同一tokenizer",
+  "⚠ 估算≠账单, 以实际API账单为准",
+];
+s10.addText(verifyItems.map((v, i) => ({ text: v, options: { breakLine: i < verifyItems.length - 1, fontSize: 11, color: C.ice, paraSpaceAfter: 6 } })), {
+  x: 5.7, y: 1.95, w: 3.4, h: 2.3, valign: "top",
+});
+
+// 底部声明
+s10.addShape(pres.shapes.RECTANGLE, { x: 0.7, y: 4.7, w: 8.6, h: 0.55, fill: { color: C.tealD } });
+s10.addText("所有数字基于官方定价+社区实测+保守推算，可独立验证。定价以官方页面为准。", {
+  x: 0.9, y: 4.75, w: 8.2, h: 0.45,
+  fontSize: 11, color: C.white, margin: 0, align: "center",
+});
+
+// ============================================================
+// SLIDE 11: 优先级排序
+// ============================================================
+const s11 = pres.addSlide();
+s11.background = { color: C.offW };
+titleBar(s11, "优先级排序 — 从易到难");
+footer(s11, "11");
+
+const priorities = [
+  { level: "P0 立即执行", time: "10秒", measures: "关闭扩展思考 + 启用autoCompact", saving: "省20-30%", color: C.green },
+  { level: "P1 本周完成", time: "20分钟", measures: "创建.claudeignore + 精简CLAUDE.md", saving: "省30-55%", color: C.teal },
+  { level: "P2 持续养成", time: "习惯", measures: "分模块会话 + 高效提问 + DeepSeek替代", saving: "省60-80%", color: C.gold },
+  { level: "P3 技术储备", time: "需开发", measures: "Prompt Caching + LLMLingua压缩", saving: "省70-90%", color: C.orange },
+];
+
+priorities.forEach((p, i) => {
+  const y = 1.25 + i * 1.05;
+  s11.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 8.6, h: 0.9, fill: { color: C.white }, shadow: makeShadow() });
+  // 优先级标签
+  s11.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.6, h: 0.9, fill: { color: p.color } });
+  s11.addText(p.level, {
+    x: 0.7, y: y + 0.2, w: 1.6, h: 0.5,
+    fontSize: 14, bold: true, color: C.white, align: "center", margin: 0,
+  });
+  // 时间
+  s11.addShape(pres.shapes.RECTANGLE, { x: 2.45, y: y + 0.15, w: 1.0, h: 0.55, fill: { color: C.grayL } });
+  s11.addText(p.time, {
+    x: 2.45, y: y + 0.2, w: 1.0, h: 0.45,
+    fontSize: 12, bold: true, color: C.navy, align: "center", margin: 0,
+  });
+  // 措施
+  s11.addText(p.measures, {
+    x: 3.6, y: y + 0.05, w: 3.5, h: 0.8,
+    fontSize: 12, color: C.dark, margin: 0, valign: "middle",
+  });
+  // 节省
+  s11.addShape(pres.shapes.RECTANGLE, { x: 7.5, y: y + 0.15, w: 1.6, h: 0.55, fill: { color: p.color } });
+  s11.addText(p.saving, {
+    x: 7.5, y: y + 0.2, w: 1.6, h: 0.45,
+    fontSize: 13, bold: true, color: C.white, align: "center", margin: 0,
+  });
+});
+
+// ============================================================
+// SLIDE 12: OpenCode优化指南
+// ============================================================
+const s12 = pres.addSlide();
+s12.background = { color: C.offW };
+titleBar(s12, "OpenCode优化指南 — 提供商套利");
+footer(s12, "12");
+
+// 左列：OpenCode独有优势
+s12.addText("OpenCode 独有优势", {
+  x: 0.7, y: 1.2, w: 4.5, h: 0.4,
+  fontSize: 16, bold: true, color: C.navy, margin: 0,
+});
+
+const ocAdvantages = [
+  "🏦 提供商套利: 同一任务可选最便宜模型",
+  "📊 用量监控: opencode stats --days 7",
+  "🎯 推理控制: --variant minimal/high/max",
+  "📁 Session管理: 按模块分Session避膨胀",
+  "🔄 多模型切换: --model provider/model",
+];
+
+s12.addText(ocAdvantages.map((v, i) => ({ text: v, options: { bullet: true, breakLine: i < ocAdvantages.length - 1, fontSize: 12, color: C.dark, paraSpaceAfter: 6 } })), {
+  x: 0.7, y: 1.7, w: 4.5, h: 2.5, valign: "top",
+});
+
+// 右列：工具分工
+s12.addText("工具分工建议", {
+  x: 5.5, y: 1.2, w: 3.8, h: 0.4,
+  fontSize: 16, bold: true, color: C.navy, margin: 0,
+});
+
+const tools = [
+  { tool: "OpenCode", pct: "60%", model: "DeepSeek V3", cost: "~$15/月", color: C.green },
+  { tool: "Claude Code", pct: "25%", model: "Sonnet", cost: "~$18/月", color: C.gold },
+  { tool: "Claude Code", pct: "10%", model: "Opus", cost: "~$20/月", color: C.red },
+  { tool: "OpenCode", pct: "5%", model: "Haiku", cost: "~$2/月", color: C.teal },
+];
+
+tools.forEach((t, i) => {
+  const y = 1.7 + i * 0.75;
+  s12.addShape(pres.shapes.RECTANGLE, { x: 5.5, y, w: 3.8, h: 0.6, fill: { color: C.white }, shadow: makeShadow() });
+  s12.addShape(pres.shapes.RECTANGLE, { x: 5.5, y, w: 0.06, h: 0.6, fill: { color: t.color } });
+  s12.addText(t.tool + " " + t.pct, {
+    x: 5.7, y: y + 0.02, w: 1.8, h: 0.25,
+    fontSize: 10, bold: true, color: C.navy, margin: 0,
+  });
+  s12.addText(t.model, {
+    x: 5.7, y: y + 0.3, w: 1.2, h: 0.22,
+    fontSize: 9, color: C.gray, margin: 0,
+  });
+  s12.addText(t.cost, {
+    x: 7.8, y: y + 0.12, w: 1.3, h: 0.35,
+    fontSize: 13, bold: true, color: t.color, align: "right", margin: 0,
+  });
+});
+
+// 底部
+s12.addShape(pres.shapes.RECTANGLE, { x: 0.7, y: 4.7, w: 8.6, h: 0.55, fill: { color: C.navy } });
+s12.addText("OpenCode + Claude Code 混合方案: 月费 ~$55 (vs 纯Opus $3,795 = 节省98.5%)", {
+  x: 0.9, y: 4.75, w: 8.2, h: 0.45,
+  fontSize: 13, color: C.white, bold: true, align: "center", margin: 0,
+});
+
+// ============================================================
+// SLIDE 13: 行动清单
+// ============================================================
+const s13 = pres.addSlide();
+s13.background = { color: C.offW };
+titleBar(s13, "行动清单");
+footer(s13, "13");
 
 const actions = [
   {
@@ -549,14 +713,14 @@ const actions = [
 actions.forEach((a, i) => {
   const y = 1.2 + i * 1.4;
   // 时间标签
-  s10.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.8, h: 0.4, fill: { color: a.color } });
-  s10.addText(a.when, {
+  s13.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.8, h: 0.4, fill: { color: a.color } });
+  s13.addText(a.when, {
     x: 0.7, y: y + 0.02, w: 1.8, h: 0.36,
     fontSize: 12, bold: true, color: C.white, align: "center", margin: 0,
   });
   // 结果标签
-  s10.addShape(pres.shapes.RECTANGLE, { x: 8.3, y: y, w: 1.0, h: 0.4, fill: { color: a.color } });
-  s10.addText(a.result, {
+  s13.addShape(pres.shapes.RECTANGLE, { x: 8.3, y: y, w: 1.0, h: 0.4, fill: { color: a.color } });
+  s13.addText(a.result, {
     x: 7.0, y: y + 0.02, w: 2.3, h: 0.36,
     fontSize: 11, bold: true, color: a.color, align: "right", margin: 0,
   });
@@ -565,23 +729,23 @@ actions.forEach((a, i) => {
     text: item,
     options: { bullet: true, breakLine: j < a.items.length - 1, fontSize: 11, color: C.dark, paraSpaceAfter: 2 },
   }));
-  s10.addText(itemTexts, { x: 0.9, y: y + 0.45, w: 8.0, h: 0.9, valign: "top" });
+  s13.addText(itemTexts, { x: 0.9, y: y + 0.45, w: 8.0, h: 0.9, valign: "top" });
 });
 
 // ============================================================
-// SLIDE 11: 结束页
+// SLIDE 14: 结束页
 // ============================================================
-const s11 = pres.addSlide();
-s11.background = { color: C.navy };
-s11.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 3.5, h: 5.625, fill: { color: C.navyL } });
-s11.addShape(pres.shapes.RECTANGLE, { x: 0, y: 4.0, w: 3.5, h: 0.06, fill: { color: C.teal } });
+const s14 = pres.addSlide();
+s14.background = { color: C.navy };
+s14.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 3.5, h: 5.625, fill: { color: C.navyL } });
+s14.addShape(pres.shapes.RECTANGLE, { x: 0, y: 4.0, w: 3.5, h: 0.06, fill: { color: C.teal } });
 
-s11.addText("感谢聆听", {
+s14.addText("感谢聆听", {
   x: 4.0, y: 1.5, w: 5.5, h: 0.8,
   fontSize: 38, bold: true, color: C.white, margin: 0,
 });
 
-s11.addText("三个关键数字", {
+s14.addText("三个关键数字", {
   x: 4.0, y: 2.5, w: 5.5, h: 0.4,
   fontSize: 14, color: C.ice, margin: 0,
 });
@@ -594,22 +758,22 @@ const numbers = [
 
 numbers.forEach((n, i) => {
   const x = 4.0 + i * 1.8;
-  s11.addText(n.n, {
+  s14.addText(n.n, {
     x, y: 3.1, w: 1.6, h: 0.6,
     fontSize: 28, bold: true, color: C.tealL, align: "center", margin: 0,
   });
-  s11.addText(n.label, {
+  s14.addText(n.label, {
     x, y: 3.7, w: 1.6, h: 0.3,
     fontSize: 10, color: C.gray, align: "center", margin: 0,
   });
 });
 
-s11.addText("GitHub: JungleTestLabs/claude-token-optimization", {
+s14.addText("GitHub: JungleTestLabs/claude-token-optimization", {
   x: 4.0, y: 4.8, w: 5.5, h: 0.3,
   fontSize: 10, color: C.gray, margin: 0,
 });
 
-s11.addText("TOKEN\nOPTIMIZATION", {
+s14.addText("TOKEN\nOPTIMIZATION", {
   x: 0.4, y: 1.2, w: 2.8, h: 1.8,
   fontSize: 16, fontFace: "Arial", charSpacing: 8, color: C.gray, align: "center", margin: 0,
 });
