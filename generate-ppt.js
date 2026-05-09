@@ -820,7 +820,7 @@ actions.forEach((a, i) => {
 // SLIDE 15: 结束页
 // ============================================================
 const s15 = pres.addSlide();
-s14.background = { color: C.navy };
+s15.background = { color: C.navy };
 s15.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 3.5, h: 5.625, fill: { color: C.navyL } });
 s15.addShape(pres.shapes.RECTANGLE, { x: 0, y: 4.0, w: 3.5, h: 0.06, fill: { color: C.teal } });
 
