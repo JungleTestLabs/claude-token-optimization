@@ -141,6 +141,7 @@ const agenda = [
   { num: "07", title: "优先级排序", desc: "从易到难，从快到慢" },
   { num: "08", title: "OpenCode优化指南", desc: "提供商套利 + 多模型策略" },
   { num: "09", title: "行动清单", desc: "今天/本周/持续要做的事" },
+  { num: "10", title: "Token监控工具", desc: "度量才能优化 — 四层工具体系" },
 ];
 
 agenda.forEach((a, i) => {
@@ -703,12 +704,61 @@ s12.addText("OpenCode + Claude Code 混合方案: 月费 ~$55 (vs 纯Opus $3,795
 });
 
 // ============================================================
-// SLIDE 13: 行动清单
+// SLIDE 13: Token监控与对比工具
 // ============================================================
 const s13 = pres.addSlide();
 s13.background = { color: C.offW };
-titleBar(s13, "行动清单");
+titleBar(s13, "Token监控与对比工具 — 度量才能优化");
 footer(s13, "13");
+
+// 四层工具卡片
+const toolLayers = [
+  { level: "🟢 即时查看", time: "10秒", tools: "/tokens + /cost + opencode stats", color: C.green },
+  { level: "🟡 会话分析", time: "5分钟", tools: "cc-cost 费用拆解 + ttok 预估 + usage.json 分析", color: C.teal },
+  { level: "🟠 持续监控", time: "30分钟部署", tools: "Langfuse 仪表盘 + LiteLLM Proxy 网关", color: C.gold },
+  { level: "🔴 A/B对比", time: "1小时搭建", tools: "自定义回放脚本 + tokencost 基准测试", color: C.red },
+];
+
+toolLayers.forEach((l, i) => {
+  const y = 1.2 + i * 0.95;
+  s13.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 8.6, h: 0.8, fill: { color: C.white }, shadow: makeShadow() });
+  s13.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 0.06, h: 0.8, fill: { color: l.color } });
+  // 标签
+  s13.addShape(pres.shapes.RECTANGLE, { x: 0.9, y: y + 0.1, w: 1.6, h: 0.55, fill: { color: l.color } });
+  s13.addText(l.level, {
+    x: 0.9, y: y + 0.15, w: 1.6, h: 0.45,
+    fontSize: 11, bold: true, color: C.white, align: "center", margin: 0,
+  });
+  // 时间
+  s13.addText(l.time, {
+    x: 2.7, y: y + 0.15, w: 1.2, h: 0.45,
+    fontSize: 10, color: C.gray, margin: 0, valign: "middle",
+  });
+  // 工具
+  s13.addText(l.tools, {
+    x: 3.9, y: y + 0.05, w: 5.2, h: 0.7,
+    fontSize: 11, color: C.dark, margin: 0, valign: "middle",
+  });
+});
+
+// 右侧核心指标
+s13.addShape(pres.shapes.RECTANGLE, { x: 0.7, y: 4.55, w: 8.6, h: 0.75, fill: { color: C.navy } });
+s13.addText("核心指标: Token效率(行/token) | 单模块成本 | 优化节省率 | 误修复率", {
+  x: 0.9, y: 4.6, w: 8.2, h: 0.3,
+  fontSize: 12, color: C.white, bold: true, align: "center", margin: 0,
+});
+s13.addText("P0: 每次用 /tokens看消耗 → P1: cc-cost拆解费用 → P2: 部署Langfuse团队监控", {
+  x: 0.9, y: 4.9, w: 8.2, h: 0.3,
+  fontSize: 10, color: C.ice, align: "center", margin: 0,
+});
+
+// ============================================================
+// SLIDE 14: 行动清单
+// ============================================================
+const s14 = pres.addSlide();
+s14.background = { color: C.offW };
+titleBar(s14, "行动清单");
+footer(s14, "14");
 
 const actions = [
   {
@@ -744,14 +794,14 @@ const actions = [
 actions.forEach((a, i) => {
   const y = 1.2 + i * 1.4;
   // 时间标签
-  s13.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.8, h: 0.4, fill: { color: a.color } });
-  s13.addText(a.when, {
+  s14.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.8, h: 0.4, fill: { color: a.color } });
+  s14.addText(a.when, {
     x: 0.7, y: y + 0.02, w: 1.8, h: 0.36,
     fontSize: 12, bold: true, color: C.white, align: "center", margin: 0,
   });
   // 结果标签
-  s13.addShape(pres.shapes.RECTANGLE, { x: 8.3, y: y, w: 1.0, h: 0.4, fill: { color: a.color } });
-  s13.addText(a.result, {
+  s14.addShape(pres.shapes.RECTANGLE, { x: 8.3, y: y, w: 1.0, h: 0.4, fill: { color: a.color } });
+  s14.addText(a.result, {
     x: 7.0, y: y + 0.02, w: 2.3, h: 0.36,
     fontSize: 11, bold: true, color: a.color, align: "right", margin: 0,
   });
@@ -760,23 +810,23 @@ actions.forEach((a, i) => {
     text: item,
     options: { bullet: true, breakLine: j < a.items.length - 1, fontSize: 11, color: C.dark, paraSpaceAfter: 2 },
   }));
-  s13.addText(itemTexts, { x: 0.9, y: y + 0.45, w: 8.0, h: 0.9, valign: "top" });
+  s14.addText(itemTexts, { x: 0.9, y: y + 0.45, w: 8.0, h: 0.9, valign: "top" });
 });
 
 // ============================================================
-// SLIDE 14: 结束页
+// SLIDE 15: 结束页
 // ============================================================
-const s14 = pres.addSlide();
+const s15 = pres.addSlide();
 s14.background = { color: C.navy };
-s14.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 3.5, h: 5.625, fill: { color: C.navyL } });
-s14.addShape(pres.shapes.RECTANGLE, { x: 0, y: 4.0, w: 3.5, h: 0.06, fill: { color: C.teal } });
+s15.addShape(pres.shapes.RECTANGLE, { x: 0, y: 0, w: 3.5, h: 5.625, fill: { color: C.navyL } });
+s15.addShape(pres.shapes.RECTANGLE, { x: 0, y: 4.0, w: 3.5, h: 0.06, fill: { color: C.teal } });
 
-s14.addText("感谢聆听", {
+s15.addText("感谢聆听", {
   x: 4.0, y: 1.5, w: 5.5, h: 0.8,
   fontSize: 38, bold: true, color: C.white, margin: 0,
 });
 
-s14.addText("三个关键数字", {
+s15.addText("三个关键数字", {
   x: 4.0, y: 2.5, w: 5.5, h: 0.4,
   fontSize: 14, color: C.ice, margin: 0,
 });
@@ -789,22 +839,22 @@ const numbers = [
 
 numbers.forEach((n, i) => {
   const x = 4.0 + i * 1.8;
-  s14.addText(n.n, {
+  s15.addText(n.n, {
     x, y: 3.1, w: 1.6, h: 0.6,
     fontSize: 28, bold: true, color: C.tealL, align: "center", margin: 0,
   });
-  s14.addText(n.label, {
+  s15.addText(n.label, {
     x, y: 3.7, w: 1.6, h: 0.3,
     fontSize: 10, color: C.gray, align: "center", margin: 0,
   });
 });
 
-s14.addText("GitHub: JungleTestLabs/claude-token-optimization", {
+s15.addText("GitHub: JungleTestLabs/claude-token-optimization", {
   x: 4.0, y: 4.8, w: 5.5, h: 0.3,
   fontSize: 10, color: C.gray, margin: 0,
 });
 
-s14.addText("TOKEN\nOPTIMIZATION", {
+s15.addText("TOKEN\nOPTIMIZATION", {
   x: 0.4, y: 1.2, w: 2.8, h: 1.8,
   fontSize: 16, fontFace: "Arial", charSpacing: 8, color: C.gray, align: "center", margin: 0,
 });
