@@ -793,24 +793,27 @@ const actions = [
 
 actions.forEach((a, i) => {
   const y = 1.2 + i * 1.4;
+  // 白色背景卡片
+  s14.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 8.6, h: 1.2, fill: { color: C.white }, shadow: makeShadow() });
+  // 左侧色条
+  s14.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 0.06, h: 1.2, fill: { color: a.color } });
   // 时间标签
-  s14.addShape(pres.shapes.RECTANGLE, { x: 0.7, y, w: 1.8, h: 0.4, fill: { color: a.color } });
+  s14.addShape(pres.shapes.RECTANGLE, { x: 0.9, y: y + 0.1, w: 1.6, h: 0.4, fill: { color: a.color } });
   s14.addText(a.when, {
-    x: 0.7, y: y + 0.02, w: 1.8, h: 0.36,
-    fontSize: 12, bold: true, color: C.white, align: "center", margin: 0,
+    x: 0.9, y: y + 0.12, w: 1.6, h: 0.36,
+    fontSize: 11, bold: true, color: C.white, align: "center", margin: 0,
   });
   // 结果标签
-  s14.addShape(pres.shapes.RECTANGLE, { x: 8.3, y: y, w: 1.0, h: 0.4, fill: { color: a.color } });
   s14.addText(a.result, {
-    x: 7.0, y: y + 0.02, w: 2.3, h: 0.36,
-    fontSize: 11, bold: true, color: a.color, align: "right", margin: 0,
+    x: 2.7, y: y + 0.12, w: 1.8, h: 0.36,
+    fontSize: 11, bold: true, color: a.color, margin: 0, valign: "middle",
   });
   // 条目
   const itemTexts = a.items.map((item, j) => ({
     text: item,
     options: { bullet: true, breakLine: j < a.items.length - 1, fontSize: 11, color: C.dark, paraSpaceAfter: 2 },
   }));
-  s14.addText(itemTexts, { x: 0.9, y: y + 0.45, w: 8.0, h: 0.9, valign: "top" });
+  s14.addText(itemTexts, { x: 4.5, y: y + 0.08, w: 4.6, h: 1.05, valign: "middle" });
 });
 
 // ============================================================
