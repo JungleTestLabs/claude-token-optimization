@@ -136,7 +136,7 @@ const agenda = [
   { num: "02", title: "成本量化模型", desc: "Sonnet vs Opus vs DeepSeek 真实成本对比" },
   { num: "03", title: "四大优化支柱", desc: "配置 · 流程 · 提示 · 工具链" },
   { num: "04", title: "量化对比与ROI", desc: "优化前 vs 优化后 — 省了多少钱？" },
-  { num: "05", title: "安卓转鸿蒙专项", desc: "针对迁移项目的特殊策略" },
+  { num: "05", title: "安卓转鸿蒙专项", desc: "四大任务特征 × 针对性优化策略" },
   { num: "06", title: "数据来源与准确性", desc: "数字怎么来的？如何验证？" },
   { num: "07", title: "优先级排序", desc: "从易到难，从快到慢" },
   { num: "08", title: "OpenCode优化指南", desc: "提供商套利 + 多模型策略" },
@@ -470,42 +470,73 @@ s8.addText("年节省: $8,292 (Sonnet) / $41,460 (Opus)  → 相当于一个中�
 });
 
 // ============================================================
-// SLIDE 9: 安卓转鸿蒙专项
+// SLIDE 9: 安卓转鸿蒙专项 — 任务特征 × 优化策略
 // ============================================================
 const s9 = pres.addSlide();
 s9.background = { color: C.offW };
-titleBar(s9, "安卓转鸿蒙场景专项");
+titleBar(s9, "安卓转鸿蒙专项 — 四大任务特征");
 footer(s9, "09");
 
-// 左列：挑战
-s9.addText("独特挑战", {
-  x: 0.7, y: 1.2, w: 4.0, h: 0.4,
-  fontSize: 16, bold: true, color: C.navy, margin: 0,
-});
-
-const challenges = [
-  "📁 双语言上下文: Kotlin原文 + ArkTS译文 = 2倍文件读取",
-  "🔄 API映射查询: findViewById→@State, 每次需额外token",
-  "📚 大量参考代码: 12+ Activity → 12+ Page需要原文对照",
-  "🏗️ 架构差异: Android组件→鸿蒙组件, 持续需要解释",
-  "🔧 反复迭代修改: UI调整/API替换→累积对话历史",
+// 2×2 网格: 特征 + 策略
+const features = [
+  {
+    title: "📖 读多写少 (Input 90% vs Output 10%)",
+    desc: "迁移需完整理解源文件逻辑(50K/r)<br/>但输出仅翻译后的代码(3K/r)",
+    strategy: "策略: 方法级引用 + /memory保存分析<br/>节省: 读token ↓60-80%",
+    color: C.red,
+  },
+  {
+    title: "🔄 对照翻译 (双文件上下文)",
+    desc: "Kotlin原文 + ArkTS译文 = 2倍读取<br/>12个模块重复读取相同源文件",
+    strategy: "策略: Prompt Caching 缓存源文件<br/>节省: 跨模块读取 ↓87%",
+    color: C.orange,
+  },
+  {
+    title: "🔁 增量迭代 (编译→修复循环)",
+    desc: "每模块20-30轮迭代,每次累积历史<br/>编译错误全文发送(浪费80%)",
+    strategy: "策略: 错误批处理+DeepSeek修<br/>节省: 编译修复 ↓84%",
+    color: C.gold,
+  },
+  {
+    title: "📋 API映射 (重复查询开销)",
+    desc: "12模块×5次API查询×1K/次<br/>= 60K token隐性浪费",
+    strategy: "策略: CLAUDE.md内置映射表+缓存<br/>节省: API查询 ↓94%",
+    color: C.teal,
+  },
 ];
 
-bulletList(s9, challenges, 0.7, 1.7, 4.5, 11);
+features.forEach((f, i) => {
+  const col = i % 2;
+  const row = Math.floor(i / 2);
+  const x = 0.7 + col * 4.5;
+  const y = 1.2 + row * 1.7;
+  const w = 4.2;
+  const h = 1.5;
 
-// 右列：策略
-s9.addText("优化策略", {
-  x: 5.5, y: 1.2, w: 4.0, h: 0.4,
-  fontSize: 16, bold: true, color: C.navy, margin: 0,
+  s9.addShape(pres.shapes.RECTANGLE, { x, y, w, h, fill: { color: C.white }, shadow: makeShadow() });
+  s9.addShape(pres.shapes.RECTANGLE, { x, y, w: 0.06, h, fill: { color: f.color } });
+  
+  // 标题
+  s9.addText(f.title, {
+    x: x + 0.2, y: y + 0.08, w: w - 0.4, h: 0.35,
+    fontSize: 11, bold: true, color: C.navy, margin: 0,
+  });
+  // 描述
+  s9.addText(f.desc, {
+    x: x + 0.2, y: y + 0.45, w: w - 0.4, h: 0.5,
+    fontSize: 9, color: C.gray, margin: 0, valign: "top",
+  });
+  // 策略(高亮条)
+  s9.addShape(pres.shapes.RECTANGLE, { x: x + 0.2, y: y + 1.05, w: w - 0.4, h: 0.35, fill: { color: f.color } });
+  s9.addText(f.strategy, {
+    x: x + 0.3, y: y + 1.08, w: w - 0.6, h: 0.3,
+    fontSize: 9, bold: true, color: C.white, margin: 0,
+  });
 });
 
-card(s9, 5.5, 1.7, 3.8, 0.85, "API映射表缓存", "CLAUDE.md内置映射表，启用Prompt Caching 省70%", C.teal);
-card(s9, 5.5, 2.7, 3.8, 0.85, "分模块迁移", "1模块1会话，完成即compact 省80%", C.tealL);
-card(s9, 5.5, 3.7, 3.8, 0.85, "DeepSeek主力", "70%任务用DeepSeek V4 省60%总费", C.green);
-
-// 底部：数字对比
+// 底部：总览
 s9.addShape(pres.shapes.RECTANGLE, { x: 0.7, y: 4.7, w: 8.6, h: 0.65, fill: { color: C.navy } });
-s9.addText("迁移项目(12模块):  未优化 $1,440(Opus) → 优化后 $22(混合)  =  节省 98.5%", {
+s9.addText("12模块迁移: 未优化$1,440(纯Opus) → 混合模型+特征优化 $3.50 = 节省99.76%", {
   x: 0.9, y: 4.75, w: 8.2, h: 0.55,
   fontSize: 13, color: C.white, bold: true, align: "center", margin: 0,
 });
