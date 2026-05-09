@@ -756,7 +756,7 @@ s13.addText("P0: 每次用 /tokens看消耗 → P1: cc-cost拆解费用 → P2: 
 // SLIDE 14: 行动清单
 // ============================================================
 const s14 = pres.addSlide();
-s14.background = { color: C.offW };
+s14.background = { color: "FFFFFF" };
 titleBar(s14, "行动清单");
 footer(s14, "14");
 
