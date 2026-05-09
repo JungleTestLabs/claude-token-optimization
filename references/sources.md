@@ -100,3 +100,16 @@
 ## 社区讨论
 
 50. Anthropic Community — "Token consumption: My month with Claude Code"
+
+---
+
+## 2026-05-09 补充（狗爹提供）
+
+51. 掘金 — "Claude Code Token 烧得太快？这8个方案帮你立省90%！" — 敲代码的彭于晏 (2026-04-24)
+    https://juejin.cn/post/7632146939555856434
+
+52. CSDN — "Claude Code Token烧钱预警！90%的成本浪费都能这样省" — xiesibo2012 (2025-12-24)
+    https://blog.csdn.net/xiesibo2012/article/details/156242927
+
+53. 腾讯云开发者社区 — "别再当Claude的大冤种了！7个新手Token省钱技巧，帮你省下90%的账单" — 点火三周 (2026-04-15)
+    https://cloud.tencent.com/developer/article/2655300
